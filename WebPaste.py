@@ -1,8 +1,21 @@
 import http.server
 import socketserver
 import urllib.parse
+import sys
 
-PORT = 8000
+# --- Read port from command-line args ---
+# Usage: python WebPaste.py [PORT]
+DEFAULT_PORT = 8000
+PORT = DEFAULT_PORT
+
+if len(sys.argv) > 1:
+    try:
+        PORT = int(sys.argv[1])
+        if not (1 <= PORT <= 65535):
+            raise ValueError
+    except ValueError:
+        print(f"Invalid port: {sys.argv[1]!r}. Using default port {DEFAULT_PORT}.")
+        PORT = DEFAULT_PORT
 
 # The latest submitted text is kept in memory
 latest_text = {"content": ""}
